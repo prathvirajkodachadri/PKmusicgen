@@ -1,0 +1,7 @@
+{
+  "drums": ["kick", "snare", "clap", "hi-hat", "tom", "percussion", "drum loop", "cinematic percussion", "tribal percussion", "folk percussion"],
+  "bass": ["sub bass", "cinematic bass", "bass hit", "bass drone", "synth bass"],
+  "instruments": ["piano", "strings", "guitar", "flute", "percussion", "synth", "pads", "plucks"],
+  "cinematic": ["impact", "whoosh", "riser", "downer", "drone", "tension", "trailer hit", "horror texture", "reverse texture", "metallic texture"],
+  "indian_folk": ["tamate", "chende", "dollu", "thavil", "mridangam", "tabla", "folk percussion", "yakshagana-inspired percussion", "coastal karnataka folk atmosphere"]
+}
