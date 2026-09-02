@@ -1,5 +1,5 @@
-# Models and weights
-models/
+# Models and weights (root directory)
+/models/
 *.bin
 *.safetensors
 *.ckpt
