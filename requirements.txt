@@ -13,10 +13,9 @@ audioread>=3.0.1
 # Database
 sqlalchemy>=2.0.0
 
-# Optional but recommended for real models
-# torch will be installed via install script with CUDA version detection
-# torch, torchaudio -- installed separately
-# transformers, diffusers, accelerate for model loading
+# Local AI runtime
+# ACE-Step 1.5 is installed from its official repository by install_windows.bat.
+# Keeping it separate avoids pinning its rapidly evolving internal dependencies here.
 transformers>=4.40.0
 diffusers>=0.27.0
 accelerate>=0.30.0
