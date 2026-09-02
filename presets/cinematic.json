@@ -1,0 +1,50 @@
+[
+  {
+    "id": "cinematic_tension",
+    "name": "Cinematic Tension",
+    "category": "cinematic",
+    "prompt": "Modern cinematic orchestral tension, deep low strings, subtle percussion, dark atmosphere, gradual build, no vocals",
+    "description": "Tense cinematic underscore with low strings",
+    "tags": ["cinematic", "tension", "strings"]
+  },
+  {
+    "id": "cinematic_epic",
+    "name": "Epic Trailer",
+    "category": "cinematic",
+    "prompt": "Epic cinematic trailer, massive percussion, braams, heroic brass, choir, dramatic hits, powerful, 20 seconds",
+    "description": "Epic trailer cue",
+    "tags": ["epic", "trailer", "orchestral"]
+  },
+  {
+    "id": "cinematic_ambient",
+    "name": "Cinematic Ambient",
+    "category": "cinematic",
+    "prompt": "Cinematic ambient pad, spacious reverb, ethereal texture, slow evolving, emotional, atmospheric, no percussion",
+    "description": "Ambient cinematic pad",
+    "tags": ["ambient", "pad", "atmospheric"]
+  },
+  {
+    "id": "cinematic_impact",
+    "name": "Cinematic Impact",
+    "category": "cinematic",
+    "prompt": "Massive cinematic impact, deep bass hit, metallic layer, short decay, dramatic trailer sound, 3 seconds",
+    "description": "Big impact hit",
+    "tags": ["impact", "hit", "trailer"]
+  },
+  {
+    "id": "cinematic_riser",
+    "name": "Cinematic Riser",
+    "category": "cinematic",
+    "prompt": "Cinematic riser, rising pitch, building tension, increasing intensity, whoosh, 8 seconds, leading to impact",
+    "description": "Riser building to hit",
+    "tags": ["riser", "build", "tension"]
+  },
+  {
+    "id": "cinematic_whoosh",
+    "name": "Whoosh",
+    "category": "cinematic",
+    "prompt": "Cinematic whoosh, fast swoosh, air movement, transition effect, 2 seconds, clean",
+    "description": "Whoosh transition",
+    "tags": ["whoosh", "swoosh", "transition"]
+  }
+]

@@ -1,0 +1,68 @@
+# PKmusicgen Configuration
+# All paths are relative to project root unless absolute
+
+app:
+  name: "PKmusicgen - Professional Offline AI Music & Sample Generator"
+  version: "1.0.0"
+  host: "127.0.0.1"  # Bind only to localhost for security
+  port: 7860
+  debug: false
+  offline_mode: false  # When true, blocks model downloads and external requests
+  log_level: "INFO"
+
+paths:
+  model_dir: "./models"
+  output_dir: "./outputs"
+  samples_dir: "./samples"
+  presets_dir: "./presets"
+  logs_dir: "./logs"
+  db_path: "./data/library.db"
+
+audio:
+  default_sample_rate: 44100  # 44100 or 48000
+  default_bit_depth: 16       # 16 or 24
+  default_duration: 10        # seconds
+  max_duration: 47            # limited by stable-audio-open, ace-step allows longer
+  min_duration: 1
+  default_channels: 2
+  export_format: "wav"
+  # Processing defaults (non-destructive, applied to copies)
+  normalize: false
+  fade_in: 0.0
+  fade_out: 0.0
+  trim_silence: false
+
+generation:
+  default_model: "procedural-dsp"  # Safe fallback that always works; user can switch to stable-audio-open-1.0 or ace-step-3.5b after download
+  default_seed: -1  # -1 = random
+  default_guidance_scale: 7.0
+  default_num_variations: 1
+  max_variations: 10
+  max_batch: 10
+
+models:
+  # Model registry is in backend/models/model_registry.py but defaults here
+  auto_load: false
+  unload_after_generation: false
+  low_vram_mode: false
+  use_fp16: true
+  cpu_offload: false
+
+hardware:
+  detect_on_startup: true
+  prefer_gpu: true
+
+ui:
+  theme: "dark"
+  waveform_resolution: 1000
+  auto_play: false
+  show_advanced: false
+
+library:
+  auto_tag: true
+  max_history: 1000
+
+security:
+  allow_external_network: true  # Set false when offline_mode true
+  max_prompt_length: 1000
+  allowed_audio_extensions: [".wav", ".mp3", ".flac", ".ogg"]

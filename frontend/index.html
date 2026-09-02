@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PKmusicgen - Professional Offline AI Music Generator</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <div class="logo">
+      <span class="logo-icon">🎵</span>
+      <span class="logo-text">PKmusicgen</span>
+      <span class="version">v1.0</span>
+    </div>
+    <div class="nav-links">
+      <button class="nav-btn active" data-page="generate">🎛️ Generate</button>
+      <button class="nav-btn" data-page="samples">🥁 Samples</button>
+      <button class="nav-btn" data-page="film">🎬 Film BGM</button>
+      <button class="nav-btn" data-page="horror">👻 Horror</button>
+      <button class="nav-btn" data-page="library">📚 Library</button>
+      <button class="nav-btn" data-page="models">🧠 Models</button>
+      <button class="nav-btn" data-page="settings">⚙️ Settings</button>
+    </div>
+    <div class="hardware-mini" id="hardware-mini">
+      <div class="hw-line">Detecting hardware...</div>
+    </div>
+    <div class="offline-toggle">
+      <label><input type="checkbox" id="offline-mode-toggle"> Offline Mode</label>
+    </div>
+  </nav>
+
+  <!-- Main -->
+  <main class="main">
+    <!-- Generate Page -->
+    <section id="page-generate" class="page active">
+      <h1>Generate Audio</h1>
+      <div class="generate-layout">
+        <div class="left-panel">
+          <div class="card">
+            <h3>Prompt Builder</h3>
+            <div class="builder-grid">
+              <div class="field">
+                <label>Genre</label>
+                <select id="genre-select"><option value="">-- Select --</option></select>
+              </div>
+              <div class="field">
+                <label>Mood</label>
+                <select id="mood-select"><option value="">-- Select --</option></select>
+              </div>
+              <div class="field">
+                <label>Texture</label>
+                <select id="texture-select"><option value="">-- Select --</option></select>
+              </div>
+              <div class="field">
+                <label>Instrumentation</label>
+                <select id="instrument-select" multiple size="4"></select>
+              </div>
+            </div>
+            <div class="field full">
+              <label>Prompt (final) - editable</label>
+              <textarea id="prompt-input" rows="4" placeholder="Dark cinematic horror drone, deep sub bass, metallic resonance, slow evolving texture, tense atmosphere, 10 seconds"></textarea>
+              <div class="char-count"><span id="prompt-count">0</span>/1000</div>
+            </div>
+            <div class="field full">
+              <label>Negative Prompt (optional)</label>
+              <input type="text" id="negative-prompt" placeholder="no vocals, no melody if you want SFX only">
+            </div>
+            <button id="build-prompt-btn" class="btn secondary">✨ Build from Builder</button>
+          </div>
+
+          <div class="card">
+            <h3>Generation Settings</h3>
+            <div class="settings-grid">
+              <div class="field">
+                <label>Model</label>
+                <select id="model-select"></select>
+                <div class="model-info" id="model-info"></div>
+              </div>
+              <div class="field">
+                <label>Duration (sec)</label>
+                <input type="range" id="duration-slider" min="1" max="47" value="10" step="1">
+                <span id="duration-value">10s</span>
+              </div>
+              <div class="field">
+                <label>Seed (-1 random)</label>
+                <input type="number" id="seed-input" value="-1">
+                <button id="random-seed-btn" class="btn small">🎲 Random</button>
+              </div>
+              <div class="field">
+                <label>Variations</label>
+                <input type="number" id="variations-input" min="1" max="10" value="1">
+              </div>
+              <div class="field">
+                <label>Guidance Scale</label>
+                <input type="range" id="guidance-slider" min="1" max="20" value="7" step="0.5">
+                <span id="guidance-value">7.0</span>
+              </div>
+              <div class="field">
+                <label>Sample Rate</label>
+                <select id="sr-select"><option value="44100">44.1 kHz</option><option value="48000">48 kHz</option></select>
+              </div>
+              <div class="field">
+                <label>Bit Depth</label>
+                <select id="bitdepth-select"><option value="16">16-bit</option><option value="24">24-bit</option></select>
+              </div>
+            </div>
+            <div class="field row">
+              <label><input type="checkbox" id="normalize-check"> Normalize</label>
+              <label>Fade In <input type="number" id="fadein-input" value="0" min="0" max="2" step="0.1" style="width:60px">s</label>
+              <label>Fade Out <input type="number" id="fadeout-input" value="0" min="0" max="2" step="0.1" style="width:60px">s</label>
+            </div>
+            <button id="generate-btn" class="btn primary large">🎵 Generate Audio</button>
+            <div id="generation-status" class="status"></div>
+          </div>
+        </div>
+
+        <div class="right-panel">
+          <div class="card">
+            <h3>Preview & Results</h3>
+            <div id="results-container">
+              <div class="empty">No generations yet. Enter a prompt and hit Generate.</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Variation Studio</h3>
+            <div class="variation-grid" id="variation-grid"></div>
+            <p class="hint">Select a generated sample first, then apply variations like Darker, Brighter, etc.</p>
+          </div>
+
+          <div class="card">
+            <h3>Prompt Presets</h3>
+            <div class="preset-tabs">
+              <button class="tab-btn active" data-cat="cinematic">Cinematic</button>
+              <button class="tab-btn" data-cat="horror">Horror</button>
+              <button class="tab-btn" data-cat="drums">Drums</button>
+              <button class="tab-btn" data-cat="indian_folk">Indian Folk</button>
+              <button class="tab-btn" data-cat="film_bgm">Film BGM</button>
+            </div>
+            <div id="preset-list" class="preset-list"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Samples Page -->
+    <section id="page-samples" class="page">
+      <h1>Sample Generator Mode</h1>
+      <div class="sample-categories">
+        <div class="cat-card" data-cat="drums">
+          <h3>🥁 Drums</h3>
+          <div class="cat-items" id="cat-drums"></div>
+        </div>
+        <div class="cat-card" data-cat="bass">
+          <h3>🎸 Bass</h3>
+          <div class="cat-items" id="cat-bass"></div>
+        </div>
+        <div class="cat-card" data-cat="instruments">
+          <h3>🎹 Instruments</h3>
+          <div class="cat-items" id="cat-instruments"></div>
+        </div>
+        <div class="cat-card" data-cat="cinematic">
+          <h3>🎬 Cinematic</h3>
+          <div class="cat-items" id="cat-cinematic"></div>
+        </div>
+        <div class="cat-card" data-cat="indian_folk">
+          <h3>🌾 Indian / Folk</h3>
+          <div class="cat-items" id="cat-indian"></div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Batch Generation</h3>
+        <div class="field row">
+          <input type="text" id="batch-prompt" placeholder="Prompt for batch" style="flex:1">
+          <input type="number" id="batch-count" value="5" min="1" max="10" style="width:80px">
+          <button id="batch-generate-btn" class="btn primary">Generate Batch</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Film BGM Page -->
+    <section id="page-film" class="page">
+      <h1>🎬 Film BGM Mode</h1>
+      <div class="card">
+        <div class="field full"><label>Scene Description</label><textarea id="film-scene" rows="3" placeholder="An old abandoned house at midnight. A man slowly walks through the corridor and hears a child laughing."></textarea></div>
+        <div class="builder-grid">
+          <div class="field"><label>Emotion</label><select id="film-emotion"><option>tension and supernatural fear</option><option>tension</option><option>fear</option><option>sadness</option><option>joy</option><option>love</option><option>anger</option><option>mystery</option><option>epic</option><option>peaceful</option><option>horror</option><option>suspense</option></select></div>
+          <div class="field"><label>Genre</label><select id="film-genre"><option>modern cinematic horror</option><option>cinematic</option><option>trailer</option><option>folk</option><option>electronic</option><option>ambient</option><option>classical</option></select></div>
+          <div class="field"><label>Duration</label><input type="number" id="film-duration" value="20" min="1" max="47"></div>
+          <div class="field"><label>BPM</label><input type="number" id="film-bpm" placeholder="optional"></div>
+          <div class="field"><label>Key</label><input type="text" id="film-key" placeholder="e.g. Cm, Am"></div>
+          <div class="field"><label>Intensity</label><select id="film-intensity"><option>low</option><option selected>medium</option><option>high</option><option>very high</option></select></div>
+          <div class="field"><label>Instrumentation (comma separated)</label><input type="text" id="film-instruments" placeholder="strings, piano, low brass"></div>
+          <div class="field"><label>Reference Mood</label><input type="text" id="film-ref" placeholder="like Interstellar, like Hereditary"></div>
+        </div>
+        <div class="field full"><label>Generated Prompt Preview</label><textarea id="film-prompt-preview" rows="3" readonly></textarea></div>
+        <button id="film-build-btn" class="btn secondary">Build Prompt</button>
+        <button id="film-generate-btn" class="btn primary">🎬 Generate BGM Variations</button>
+        <div id="film-results"></div>
+      </div>
+    </section>
+
+    <!-- Horror Page -->
+    <section id="page-horror" class="page">
+      <h1>👻 Horror Sound Design Mode</h1>
+      <div class="card">
+        <div class="builder-grid">
+          <div class="field"><label>Mood</label><select id="horror-mood"><option>terrifying</option><option>creepy</option><option>tense</option><option>dark</option><option>mysterious</option><option>aggressive</option></select></div>
+          <div class="field"><label>Texture</label><select id="horror-texture"><option>metallic</option><option>organic</option><option>distorted</option><option>granular</option><option>whisper</option><option>smooth</option></select></div>
+          <div class="field"><label>Movement</label><select id="horror-movement"><option>slowly evolving</option><option>pulsing</option><option>static</option><option>random</option><option>rising</option><option>falling</option></select></div>
+          <div class="field"><label>Frequency</label><select id="horror-freq"><option>deep</option><option>mid</option><option>high</option><option>wide</option></select></div>
+          <div class="field"><label>Duration</label><input type="number" id="horror-duration" value="8" min="1" max="47"></div>
+        </div>
+        <div class="field full"><label>Preset</label><select id="horror-preset"><option value="">-- Custom --</option></select></div>
+        <div class="field full"><label>Prompt Preview</label><textarea id="horror-prompt-preview" rows="3" readonly></textarea></div>
+        <button id="horror-build-btn" class="btn secondary">Build Horror Prompt</button>
+        <button id="horror-generate-btn" class="btn primary">👻 Generate Horror Sound</button>
+        <div id="horror-results"></div>
+      </div>
+      <div class="card">
+        <h3>Horror Presets</h3>
+        <div id="horror-preset-grid" class="preset-grid"></div>
+      </div>
+    </section>
+
+    <!-- Library Page -->
+    <section id="page-library" class="page">
+      <h1>📚 Sample Library</h1>
+      <div class="card">
+        <div class="library-controls">
+          <input type="text" id="library-search" placeholder="Search prompt, filename, tags...">
+          <select id="library-category"><option value="">All Categories</option></select>
+          <select id="library-model"><option value="">All Models</option></select>
+          <label><input type="checkbox" id="library-fav"> Favorites only</label>
+          <button id="library-refresh" class="btn small">🔄 Refresh</button>
+        </div>
+        <div id="library-stats"></div>
+        <div id="library-list" class="library-list"></div>
+      </div>
+    </section>
+
+    <!-- Models Page -->
+    <section id="page-models" class="page">
+      <h1>🧠 Model Manager</h1>
+      <div class="card">
+        <p>Models are stored locally in <code>./models/</code>. After download, generation works offline. <strong>Check MODEL_LICENSES.md before commercial use.</strong></p>
+        <div id="models-list"></div>
+      </div>
+      <div class="card">
+        <h3>First-Run Setup</h3>
+        <ol>
+          <li>Hardware detected automatically (see Settings).</li>
+          <li>Choose a model below. Recommended: <strong>procedural-dsp</strong> (built-in, no download) for testing, <strong>stable-audio-open-1.0</strong> for SFX/samples, <strong>ace-step-3.5b</strong> for music (Apache 2.0 commercial safe).</li>
+          <li>Check license, VRAM requirement, size.</li>
+          <li>Click Download (requires internet).</li>
+          <li>After download, enable Offline Mode in Settings if desired.</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- Settings Page -->
+    <section id="page-settings" class="page">
+      <h1>⚙️ Settings</h1>
+      <div class="card">
+        <h3>Hardware</h3>
+        <div id="settings-hardware"></div>
+      </div>
+      <div class="card">
+        <h3>Paths & Config</h3>
+        <div id="settings-config"></div>
+      </div>
+      <div class="card">
+        <h3>Offline Mode</h3>
+        <p>When ON, blocks model downloads and external network requests. Generation still works with installed models.</p>
+        <label><input type="checkbox" id="settings-offline"> Enable Offline Mode</label>
+      </div>
+      <div class="card">
+        <h3>Audio Settings</h3>
+        <div class="field"><label>Default Sample Rate</label><select id="settings-sr"><option value="44100">44.1 kHz</option><option value="48000">48 kHz</option></select></div>
+        <div class="field"><label>Default Bit Depth</label><select id="settings-bit"><option value="16">16-bit</option><option value="24">24-bit</option></select></div>
+        <div class="field"><label>Default Duration</label><input type="number" id="settings-duration" value="10" min="1" max="47"></div>
+      </div>
+      <div class="card">
+        <h3>About</h3>
+        <p><strong>PKmusicgen</strong> - Professional Offline AI Music & Sample Generator<br>
+        Version 1.0.0 | MIT License (app) | Models have separate licenses (see MODEL_LICENSES.md)<br>
+        Offline-first, local inference, no telemetry, no cloud API.</p>
+        <p>Supported: Windows 10/11, NVIDIA CUDA, CPU fallback. Linux support planned.</p>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

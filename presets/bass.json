@@ -1,0 +1,34 @@
+[
+  {
+    "id": "sub_bass",
+    "name": "Sub Bass",
+    "category": "bass",
+    "prompt": "Deep sub bass, pure sine, 40Hz, clean, one-shot, subwoofer, 2 seconds",
+    "description": "Pure sub",
+    "tags": ["sub", "bass", "sine"]
+  },
+  {
+    "id": "cinematic_bass",
+    "name": "Cinematic Bass",
+    "category": "bass",
+    "prompt": "Cinematic bass hit, deep, distorted, trailer bass, massive, 3 seconds, impactful",
+    "description": "Cinematic bass hit",
+    "tags": ["cinematic", "bass", "hit"]
+  },
+  {
+    "id": "bass_drone",
+    "name": "Bass Drone",
+    "category": "bass",
+    "prompt": "Bass drone, deep evolving, dark, sub bass texture, slow movement, 10 seconds",
+    "description": "Bass drone",
+    "tags": ["bass", "drone", "sub"]
+  },
+  {
+    "id": "synth_bass",
+    "name": "Synth Bass",
+    "category": "bass",
+    "prompt": "Synth bass, analog, warm, filtered, punchy, one-shot, electronic",
+    "description": "Analog synth bass",
+    "tags": ["synth", "bass", "analog"]
+  }
+]
