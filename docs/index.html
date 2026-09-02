@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>midi-to-python — Convert MIDI files into Python scripts</title>
+  <meta name="description" content="Convert MIDI (.mid / .midi) files into executable Python scripts using Mido. Runs entirely in your browser with Pyodide." />
+  <meta name="theme-color" content="#0b0d12" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-row">
+      <a class="brand" href="#top">
+        <span class="brand-mark" aria-hidden="true">♪</span>
+        <span class="brand-name">midi-to-python</span>
+      </a>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="#try">Try it</a>
+        <a href="#features">Features</a>
+        <a href="#install">Install</a>
+        <a href="#usage">Usage</a>
+        <a href="#modes">Modes</a>
+        <a href="#docs">Docs</a>
+        <a class="nav-github" href="https://github.com/prathvirajkodachadri/PKmusicgen" rel="noopener" target="_blank">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.73.5.74 5.49.74 11.76c0 4.96 3.22 9.16 7.69 10.65.56.1.77-.24.77-.54v-1.9c-3.13.68-3.79-1.51-3.79-1.51-.51-1.31-1.25-1.66-1.25-1.66-1.03-.7.08-.69.08-.69 1.14.08 1.74 1.17 1.74 1.17 1.01 1.74 2.66 1.24 3.31.95.1-.74.4-1.24.72-1.53-2.5-.28-5.14-1.25-5.14-5.56 0-1.23.44-2.23 1.16-3.02-.12-.29-.5-1.43.11-2.98 0 0 .95-.3 3.11 1.15.9-.25 1.86-.37 2.82-.38.96 0 1.92.13 2.82.38 2.16-1.45 3.11-1.15 3.11-1.15.61 1.55.23 2.69.11 2.98.72.79 1.16 1.79 1.16 3.02 0 4.32-2.64 5.27-5.16 5.55.41.35.78 1.04.78 2.1v3.11c0 .3.2.65.78.54 4.46-1.49 7.68-5.69 7.68-10.65C23.26 5.49 18.27.5 12 .5z"/></svg>
+          GitHub
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="container hero-inner">
+        <div class="hero-text">
+          <p class="eyebrow">MIDI &nbsp;·&nbsp; Python &nbsp;·&nbsp; Open source</p>
+          <h1>Turn MIDI files into <span class="grad">executable Python</span>.</h1>
+          <p class="lede">
+            <code>midi-to-python</code> converts <code>.mid</code> and <code>.midi</code> files into
+            Python scripts that recreate the original MIDI using
+            <a href="https://mido.readthedocs.io/" rel="noopener" target="_blank">Mido</a>.
+            Perfect for musicians, producers, and AI music tools.
+          </p>
+          <div class="hero-cta">
+            <a class="btn btn-primary" href="#try">Try it in your browser</a>
+            <a class="btn btn-ghost" href="#install">pip install</a>
+          </div>
+          <ul class="hero-badges" aria-label="Badges">
+            <li><span class="badge">Python 3.10+</span></li>
+            <li><span class="badge">MIT License</span></li>
+            <li><span class="badge">Round-trip tested</span></li>
+            <li><span class="badge">No eval / exec</span></li>
+          </ul>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="piano">
+            <div class="white-keys">
+              <span></span><span></span><span></span><span></span>
+              <span></span><span></span><span></span><span></span>
+            </div>
+            <div class="black-keys">
+              <i></i><i></i><i></i><i></i><i></i>
+            </div>
+          </div>
+          <div class="art-bars">
+            <span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="try" class="section try">
+      <div class="container">
+        <div class="section-head">
+          <h2>Try it in your browser</h2>
+          <p>Drop a <code>.mid</code> / <code>.midi</code> file below. Everything runs locally in your browser via <a href="https://pyodide.org/" rel="noopener" target="_blank">Pyodide</a> — nothing is uploaded.</p>
+        </div>
+
+        <div class="try-grid">
+          <div class="card try-card">
+            <div class="card-head">
+              <h3>1. Upload MIDI</h3>
+              <span class="status" id="status">Initializing Python runtime…</span>
+            </div>
+
+            <label class="dropzone" id="dropzone" for="file-input" tabindex="0">
+              <input type="file" id="file-input" accept=".mid,.midi,.mids" hidden />
+              <div class="dropzone-inner">
+                <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="17 8 12 3 7 8" />
+                  <line x1="12" y1="3" x2="12" y2="15" />
+                </svg>
+                <p><strong>Click to choose</strong> or drag &amp; drop a MIDI file</p>
+                <p class="hint">.mid · .midi · .mids</p>
+              </div>
+            </label>
+
+            <div class="file-meta" id="file-meta" hidden>
+              <div>
+                <span class="meta-label">File</span>
+                <span class="meta-value" id="meta-name">—</span>
+              </div>
+              <div>
+                <span class="meta-label">Size</span>
+                <span class="meta-value" id="meta-size">—</span>
+              </div>
+              <div>
+                <span class="meta-label">Tracks</span>
+                <span class="meta-value" id="meta-tracks">—</span>
+              </div>
+              <div>
+                <span class="meta-label">Ticks / beat</span>
+                <span class="meta-value" id="meta-tpb">—</span>
+              </div>
+              <div>
+                <span class="meta-label">Tempo</span>
+                <span class="meta-value" id="meta-tempo">—</span>
+              </div>
+            </div>
+
+            <div class="controls">
+              <div class="control">
+                <label for="mode">Mode</label>
+                <select id="mode">
+                  <option value="exact" selected>exact — preserves all MIDI data</option>
+                  <option value="readable">readable — adds musical helpers</option>
+                </select>
+              </div>
+              <div class="control">
+                <label for="comments">
+                  <input type="checkbox" id="comments" checked />
+                  Include comments in output
+                </label>
+              </div>
+            </div>
+
+            <div class="actions">
+              <button class="btn btn-primary" id="convert-btn" disabled>Convert to Python</button>
+              <button class="btn btn-ghost" id="copy-btn" disabled>Copy code</button>
+              <button class="btn btn-ghost" id="download-btn" disabled>Download .py</button>
+            </div>
+
+            <div class="alert" id="alert" hidden></div>
+          </div>
+
+          <div class="card output-card">
+            <div class="card-head">
+              <h3>2. Generated Python</h3>
+              <span class="meta-value" id="line-count">0 lines</span>
+            </div>
+            <pre class="code-output" id="output" aria-live="polite"><code id="output-code">// Drop a MIDI file to begin…</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="section">
+      <div class="container">
+        <div class="section-head">
+          <h2>Features</h2>
+          <p>Everything you need to round-trip MIDI ↔ Python with high fidelity.</p>
+        </div>
+        <ul class="feature-grid">
+          <li><div class="feat-icon">🎹</div><h3>Standard MIDI</h3><p>Supports <code>.mid</code> and <code>.midi</code>, Type 0 and Type 1, multiple tracks and channels, including drums on channel 10.</p></li>
+          <li><div class="feat-icon">🎼</div><h3>Full metadata</h3><p>Tempo changes, time signatures, key signatures, track names, lyrics, markers, instrument names and more.</p></li>
+          <li><div class="feat-icon">🎸</div><h3>All messages</h3><p>Program changes, control changes, pitch bend, aftertouch, polyphonic aftertouch — preserved exactly.</p></li>
+          <li><div class="feat-icon">🔍</div><h3>Two modes</h3><p><strong>exact</strong> preserves raw MIDI data. <strong>readable</strong> adds musical helpers like chord detection and named notes.</p></li>
+          <li><div class="feat-icon">🛡️</div><h3>Safe by design</h3><p>MIDI is treated as untrusted. No <code>eval</code> / <code>exec</code>, sanitized filenames, validated output.</p></li>
+          <li><div class="feat-icon">✅</div><h3>Round-trip tested</h3><p>Verified that <code>MIDI → Python → MIDI</code> reproduces the original message stream.</p></li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="install" class="section section-alt">
+      <div class="container">
+        <div class="section-head">
+          <h2>Install</h2>
+          <p>Python 3.10+ and a single dependency: <a href="https://mido.readthedocs.io/" rel="noopener" target="_blank">Mido</a>.</p>
+        </div>
+        <div class="install-grid">
+          <div>
+            <h3>From source</h3>
+            <pre class="code"><code>git clone https://github.com/prathvirajkodachadri/PKmusicgen.git
+cd PKmusicgen
+pip install -r requirements.txt</code></pre>
+            <h3>Editable install</h3>
+            <pre class="code"><code>pip install -e .</code></pre>
+            <h3>Or just Mido</h3>
+            <pre class="code"><code>pip install mido</code></pre>
+          </div>
+          <div class="callout">
+            <h3>Why the web app needs no install</h3>
+            <p>The <a href="#try">in-browser converter</a> above runs the real conversion pipeline via <a href="https://pyodide.org/" rel="noopener" target="_blank">Pyodide</a>. Your MIDI file is processed entirely in your browser — no upload, no server, no install.</p>
+            <p>The CLI tool above is the same code, just packaged for Python on your machine.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="usage" class="section">
+      <div class="container">
+        <div class="section-head">
+          <h2>Usage</h2>
+          <p>Convert a MIDI file and run the generated Python to recreate the original.</p>
+        </div>
+        <h3>Basic</h3>
+        <pre class="code"><code>python midi_to_python.py input.mid
+# Generates input.py
+
+python input.py
+# Generates input_recreated.mid</code></pre>
+
+        <h3>Choose output &amp; mode</h3>
+        <pre class="code"><code>python midi_to_python.py song.mid -o song.py --mode readable
+python song.py
+# -> song_recreated.mid</code></pre>
+
+        <h3>All options</h3>
+        <div class="table-wrap">
+          <table class="opts">
+            <thead><tr><th>Option</th><th>Description</th></tr></thead>
+            <tbody>
+              <tr><td><code>-o, --output</code></td><td>Output Python file (default: <code>&lt;input&gt;.py</code>)</td></tr>
+              <tr><td><code>--mode</code></td><td><code>exact</code> (default) or <code>readable</code></td></tr>
+              <tr><td><code>--encoding</code></td><td>Output encoding (default: <code>utf-8</code>)</td></tr>
+              <tr><td><code>--no-comments</code></td><td>Omit comments</td></tr>
+              <tr><td><code>--stdout</code></td><td>Write to stdout instead of file</td></tr>
+              <tr><td><code>--version</code></td><td>Show version</td></tr>
+              <tr><td><code>--help</code></td><td>Show help</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="modes" class="section section-alt">
+      <div class="container">
+        <div class="section-head">
+          <h2>Two conversion modes</h2>
+          <p>Pick the trade-off that fits your use case.</p>
+        </div>
+        <div class="modes-grid">
+          <div class="card mode-card">
+            <h3>Exact mode <span class="tag">default</span></h3>
+            <p>Preserves MIDI data as accurately as possible: ticks per beat, tracks, channels, note timing, durations, velocity, tempo, time/key signatures, instruments, control changes, pitch bend, aftertouch, and metadata.</p>
+            <pre class="code small"><code>"""
+Generated by MIDI-to-Python.
+
+Source MIDI: song.mid
+Conversion mode: exact
+"""
+
+from mido import MidiFile, MidiTrack, Message, MetaMessage
+
+TICKS_PER_BEAT = 480
+MIDI_TYPE = 1
+OUTPUT_MIDI = "song_recreated.mid"
+
+mid = MidiFile(ticks_per_beat=TICKS_PER_BEAT, type=MIDI_TYPE)
+
+track_0 = MidiTrack()
+track_0.append(MetaMessage('track_name', name='Piano', time=0))
+track_0.append(Message('program_change', channel=0, program=0, time=0))
+track_0.append(Message('note_on', channel=0, note=60, velocity=64, time=0))
+track_0.append(Message('note_off', channel=0, note=60, velocity=64, time=480))
+mid.tracks.append(track_0)
+
+mid.save(OUTPUT_MIDI)</code></pre>
+          </div>
+          <div class="card mode-card">
+            <h3>Readable mode</h3>
+            <p>Adds human-readable musical structures on top of an accurate reconstruction: helper functions, named notes (<code>C4</code>), durations in beats, tempo/key/time-signature constants, and chord detection.</p>
+            <pre class="code small"><code>NOTE_NAMES = ["C", "C#", "D", "D#", "E", "F",
+              "F#", "G", "G#", "A", "A#", "B"]
+
+def note_name(midi_note: int) -> str:
+    """Convert MIDI note number to note name."""
+    ...
+
+TICKS_PER_BEAT = 480
+TEMPO_BPM = 120.0
+TIME_SIGNATURE = (4, 4)
+KEY_SIGNATURE = "C"
+
+# Track 0: Piano
+# Notes: 24
+notes_0 = [
+    ("C4", 60, 0.000, 1.000, 64, 0),  # tick 0
+    ("E4", 64, 1.000, 1.000, 64, 0),  # tick 480
+]</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="docs" class="section">
+      <div class="container">
+        <div class="section-head">
+          <h2>Documentation</h2>
+          <p>The full README is the source of truth. Key sections:</p>
+        </div>
+        <div class="docs-grid">
+          <a class="card doc-card" href="https://github.com/prathvirajkodachadri/PKmusicgen#supported-midi-messages" target="_blank" rel="noopener">
+            <h3>Supported messages</h3>
+            <p>Notes, program changes, control changes, pitch bend, aftertouch, tempo, time/key signatures, sysex, and more.</p>
+            <span class="arrow">Read →</span>
+          </a>
+          <a class="card doc-card" href="https://github.com/prathvirajkodachadri/PKmusicgen#project-architecture" target="_blank" rel="noopener">
+            <h3>Architecture</h3>
+            <p>Modular layout: parser, generator, models, CLI, and utils — designed to be extended.</p>
+            <span class="arrow">Read →</span>
+          </a>
+          <a class="card doc-card" href="https://github.com/prathvirajkodachadri/PKmusicgen#limitations--round-trip-behavior" target="_blank" rel="noopener">
+            <h3>Round-trip behavior</h3>
+            <p>What is preserved exactly, what is reconstructed, and the documented edge cases.</p>
+            <span class="arrow">Read →</span>
+          </a>
+          <a class="card doc-card" href="https://github.com/prathvirajkodachadri/PKmusicgen#development-setup" target="_blank" rel="noopener">
+            <h3>Development setup</h3>
+            <p>Run the test suite, set up a venv, and contribute new features or bug fixes.</p>
+            <span class="arrow">Read →</span>
+          </a>
+          <a class="card doc-card" href="https://github.com/prathvirajkodachadri/PKmusicgen#security" target="_blank" rel="noopener">
+            <h3>Security</h3>
+            <p>How MIDI is treated as untrusted input — no <code>eval</code>/<code>exec</code>, sanitized identifiers and filenames.</p>
+            <span class="arrow">Read →</span>
+          </a>
+          <a class="card doc-card" href="https://github.com/prathvirajkodachadri/PKmusicgen/blob/main/examples/README.md" target="_blank" rel="noopener">
+            <h3>Examples</h3>
+            <p>Sample generated Python files and end-to-end workflows in the <code>examples/</code> directory.</p>
+            <span class="arrow">Read →</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt cta">
+      <div class="container cta-row">
+        <div>
+          <h2>Ready to convert your MIDI?</h2>
+          <p>Use the in-browser tool, or grab the CLI and pipe it into your own workflow.</p>
+        </div>
+        <div class="cta-actions">
+          <a class="btn btn-primary" href="#try">Try it now</a>
+          <a class="btn btn-ghost" href="https://github.com/prathvirajkodachadri/PKmusicgen" rel="noopener" target="_blank">View on GitHub</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-row">
+      <p>© midi-to-python contributors · MIT License</p>
+      <p>
+        <a href="https://github.com/prathvirajkodachadri/PKmusicgen" rel="noopener" target="_blank">Source</a>
+        ·
+        <a href="https://github.com/prathvirajkodachadri/PKmusicgen/issues" rel="noopener" target="_blank">Issues</a>
+        ·
+        Built with <a href="https://pyodide.org/" rel="noopener" target="_blank">Pyodide</a>
+      </p>
+    </div>
+  </footer>
+
+  <script src="assets/app.js" type="module"></script>
+</body>
+</html>
