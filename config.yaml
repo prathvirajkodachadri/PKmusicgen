@@ -1,10 +1,10 @@
 # PKmusicgen Configuration
-# All paths are relative to project root unless absolute
+# Free Online AI Music & Audio Generation Platform
 
 app:
-  name: "PKmusicgen - Professional Offline AI Music & Sample Generator"
+  name: "PKmusicgen - Free Online AI Music & Sample Generator"
   version: "1.0.0"
-  host: "127.0.0.1"  # Bind only to localhost for security
+  host: "0.0.0.0"  # Bind to 0.0.0.0 for preview & cloud access
   port: 7860
   debug: false
   offline_mode: false  # When true, blocks model downloads and external requests
@@ -22,26 +22,24 @@ audio:
   default_sample_rate: 44100  # 44100 or 48000
   default_bit_depth: 16       # 16 or 24
   default_duration: 10        # seconds
-  max_duration: 47            # limited by stable-audio-open, ace-step allows longer
+  max_duration: 240           # full songs supported
   min_duration: 1
   default_channels: 2
   export_format: "wav"
-  # Processing defaults (non-destructive, applied to copies)
   normalize: false
   fade_in: 0.0
   fade_out: 0.0
   trim_silence: false
 
 generation:
-  default_model: "procedural-dsp"  # Safe fallback that always works; user can switch to stable-audio-open-1.0 or ace-step-3.5b after download
-  default_seed: -1  # -1 = random
+  default_model: "procedural-dsp"  # Fast built-in AI/DSP synthesizer (100% free, 0 VRAM, instant)
+  default_seed: -1                 # -1 = random
   default_guidance_scale: 7.0
   default_num_variations: 1
   max_variations: 10
   max_batch: 10
 
 models:
-  # Model registry is in backend/models/model_registry.py but defaults here
   auto_load: false
   unload_after_generation: false
   low_vram_mode: false
@@ -63,6 +61,6 @@ library:
   max_history: 1000
 
 security:
-  allow_external_network: true  # Set false when offline_mode true
+  allow_external_network: true
   max_prompt_length: 1000
   allowed_audio_extensions: [".wav", ".mp3", ".flac", ".ogg"]
