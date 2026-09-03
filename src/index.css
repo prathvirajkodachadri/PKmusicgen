@@ -1,0 +1,337 @@
+@import "tailwindcss";
+
+@theme {
+  --color-panel: #0b0d0f;
+  --color-panel-2: #14171a;
+  --color-unit: #171b1f;
+  --color-unit-2: #1c2126;
+  --color-etch: #232a30;
+  --color-legend: #8b949e;
+  --color-legend-dim: #626b75;
+  --color-ink: #e6e9ec;
+  --color-signal: #35e08a;
+  --color-amber: #f5a524;
+  --color-clip: #ff4d4d;
+  --color-ects: #38bdf8;
+
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+body {
+  background-color: var(--color-panel);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--color-amber) 32%, transparent);
+  color: #fff;
+}
+
+/* ---------- Engraved faceplate language ---------- */
+
+.legend {
+  font-family: var(--font-display);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-legend);
+}
+
+.num {
+  font-family: var(--font-display);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Rack unit: a faceplate with a bevel top edge and screw holes */
+.rack {
+  position: relative;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.045) 0%, rgba(255, 255, 255, 0) 46%),
+    linear-gradient(180deg, #1a1f24 0%, #15181c 100%);
+  border: 1px solid #232a30;
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.07),
+    inset 0 -1px 0 0 rgba(0, 0, 0, 0.5),
+    0 12px 34px -18px rgba(0, 0, 0, 0.95);
+}
+
+.rack::before,
+.rack::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 5px;
+  height: 5px;
+  margin-top: -2.5px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #454d55 0%, #14181c 70%);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.07);
+  pointer-events: none;
+}
+.rack::before {
+  left: 8px;
+}
+.rack::after {
+  right: 8px;
+}
+
+/* Hairline engraved rule under section header strips */
+.hairline {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    #2b333a 12%,
+    #2b333a 88%,
+    transparent 100%
+  );
+}
+
+.panel-grain {
+  background-image: url("/images/panel-texture.jpg");
+  background-size: 340px;
+  opacity: 0.16;
+  mix-blend-mode: overlay;
+}
+
+/* Engraved vertical channel-label rail text */
+.vertical-legend {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  letter-spacing: 0.3em;
+}
+
+/* Focus: amber ring like a console selection LED */
+:where(a, button, input, select, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-amber);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+/* Segmented meter glow */
+.seg-on {
+  box-shadow: 0 0 6px -1px currentColor;
+}
+
+/* Traveling signal packets along routing paths */
+@keyframes dash-travel {
+  to {
+    stroke-dashoffset: -160;
+  }
+}
+.packet-flow {
+  stroke-dasharray: 5 155;
+  animation: dash-travel 2.6s linear infinite;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.28;
+  }
+}
+.led-blink {
+  animation: blink 1.6s ease-in-out infinite;
+}
+
+@keyframes needle-sway {
+  0%,
+  100% {
+    transform: rotate(-3.2deg);
+  }
+  50% {
+    transform: rotate(2.6deg);
+  }
+}
+.needle {
+  transform-origin: 50% 100%;
+  animation: needle-sway 2.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* Form controls styled as machined panel parts */
+.panel-input {
+  background: #0e1215;
+  border: 1px solid #2a323a;
+  box-shadow: inset 0 2px 5px -2px rgba(0, 0, 0, 0.85);
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-variant-numeric: tabular-nums;
+  transition: border-color 0.15s ease;
+}
+.panel-input:hover {
+  border-color: #3a444e;
+}
+.panel-input:focus {
+  border-color: var(--color-amber);
+  outline: none;
+  box-shadow:
+    inset 0 2px 5px -2px rgba(0, 0, 0, 0.85),
+    0 0 0 2px color-mix(in srgb, var(--color-amber) 30%, transparent);
+}
+
+/* Thin scrollbar in the anodized spirit */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #2f3841 transparent;
+}
+*::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+*::-webkit-scrollbar-thumb {
+  background: #2f3841;
+  border-radius: 9px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* -------------------- Mixer hardware: faders, meters, pan -------------------- */
+
+.fader {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+.fader::-webkit-slider-runnable-track {
+  height: 5px;
+  border-radius: 3px;
+  background: linear-gradient(180deg, #232a30, #101418);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.9);
+}
+.fader::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 26px;
+  height: 13px;
+  margin-top: -4px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, #4a545e 0%, #262d34 55%, #191e22 100%);
+  border: 1px solid #58626c;
+  box-shadow:
+    0 2px 5px rgba(0, 0, 0, 0.85),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+.fader:hover::-webkit-slider-thumb,
+.fader:focus-visible::-webkit-slider-thumb {
+  border-color: var(--color-amber);
+  box-shadow:
+    0 0 0 2px color-mix(in srgb, var(--color-amber) 30%, transparent),
+    0 2px 5px rgba(0, 0, 0, 0.85);
+}
+.fader::-moz-range-track {
+  height: 5px;
+  border-radius: 3px;
+  background: linear-gradient(180deg, #232a30, #101418);
+}
+.fader::-moz-range-thumb {
+  width: 24px;
+  height: 12px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, #4a545e, #191e22);
+  border: 1px solid #58626c;
+}
+
+.mini-range {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+.mini-range::-webkit-slider-runnable-track {
+  height: 3px;
+  border-radius: 2px;
+  background: #232a30;
+}
+.mini-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 11px;
+  height: 11px;
+  margin-top: -4px;
+  border-radius: 50%;
+  background: #aab3bc;
+  border: 1px solid #14181c;
+  transition: background 0.15s ease;
+}
+.mini-range:hover::-webkit-slider-thumb {
+  background: var(--color-amber);
+}
+.mini-range::-moz-range-track {
+  height: 3px;
+  border-radius: 2px;
+  background: #232a30;
+}
+.mini-range::-moz-range-thumb {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #aab3bc;
+  border: 1px solid #14181c;
+}
+
+/* Channel meter: seg-free bar with engraved tick overlay */
+@keyframes meter-breathe {
+  0%,
+  100% {
+    transform: scaleY(var(--s0, 0.72));
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+.meter-bar {
+  transform-origin: bottom center;
+  animation: meter-breathe 2.6s ease-in-out infinite;
+}
+.meter-ticks {
+  background-image: repeating-linear-gradient(
+    to top,
+    transparent 0 3px,
+    rgba(0, 0, 0, 0.6) 3px 4px
+  );
+}
+
+.mixer-scroll {
+  scroll-snap-type: x proximity;
+  scrollbar-width: thin;
+}
+.mixer-scroll > * {
+  scroll-snap-align: start;
+}
