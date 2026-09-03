@@ -1,424 +1,73 @@
-# midi-to-python
+# React + TypeScript + Vite
 
-![Python: 3.10+](https://img.shields.io/badge/Python-3.10+-blue.svg)
-![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
-![Tests](https://img.shields.io/badge/tests-pytest-brightgreen.svg)
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Convert MIDI (`.mid` / `.midi`) files into executable Python scripts using the **Mido** library. The generated Python script can recreate the original MIDI file without needing the source.
+Currently, two official plugins are available:
 
-Useful for musicians, producers, developers, and AI music tools such as MIDI-GPT.
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-```
-my_song.mid
-     ↓
-midi_to_python.py
-     ↓
-my_song.py
-     ↓
-my_song_recreated.mid
-```
+## React Compiler
 
-## Features
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-- 🎹 Supports `.mid` and `.midi` files, Type 0 and Type 1
-- 🎼 Multiple tracks, multiple channels, drums (channel 10)
-- ⏱️ Tempo changes, time signatures, key signatures
-- 🎸 Program changes, control changes, pitch bend, aftertouch
-- 📝 Meta messages (track names, lyrics, markers, etc.)
-- 🔍 Two conversion modes: **exact** and **readable**
-- 🛡️ Treats MIDI as untrusted input, no `eval`/`exec`
-- ✅ Round-trip tested: `MIDI → Python → MIDI`
-- 🖥️ Works on Windows, macOS, Linux
-- 🧩 Clean modular architecture, extensible for future features
+## Expanding the ESLint configuration
 
-## Installation
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
-### From source
+```js
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
 
-```bash
-git clone https://github.com/prathvirajkodachadri/PKmusicgen.git
-cd PKmusicgen
-pip install -r requirements.txt
-```
+      // Remove tseslint.configs.recommended and replace with this
+      tseslint.configs.recommendedTypeChecked,
+      // Alternatively, use this for stricter rules
+      tseslint.configs.strictTypeChecked,
+      // Optionally, add this for stylistic rules
+      tseslint.configs.stylisticTypeChecked,
 
-### With pip (editable)
-
-```bash
-pip install -e .
+      // Other configs...
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
 ```
 
-### Requirements
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-- Python 3.10+
-- `mido>=1.3.0`
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
 
-```bash
-pip install mido
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+      // Enable lint rules for React
+      reactX.configs['recommended-typescript'],
+      // Enable lint rules for React DOM
+      reactDom.configs.recommended,
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
 ```
-
-## Usage
-
-### Basic
-
-```bash
-python midi_to_python.py input.mid
-# Generates input.py
-
-python input.py
-# Generates input_recreated.mid
-```
-
-### Specify output
-
-```bash
-python midi_to_python.py song.mid -o song.py
-python song.py
-# -> song_recreated.mid
-```
-
-### Readable mode
-
-```bash
-python midi_to_python.py drums.mid --output drums.py --mode readable
-```
-
-### All options
-
-```bash
-python midi_to_python.py INPUT -o OUTPUT --mode exact|readable --encoding utf-8 --no-comments --stdout --version --help
-```
-
-| Option | Description |
-|--------|-------------|
-| `-o, --output` | Output Python file (default: `<input>.py`) |
-| `--mode` | `exact` (default) or `readable` |
-| `--encoding` | Output encoding (default: utf-8) |
-| `--no-comments` | Omit comments |
-| `--stdout` | Write to stdout instead of file |
-| `--version` | Show version |
-| `--help` | Show help |
-
-### Console output
-
-```
-MIDI-to-Python Converter
-------------------------
-Input: song.mid
-Tracks: 4
-Ticks per beat: 480
-Tempo: 150.00 BPM
-Time Signature: 4/4
-Key Signature: C
-Mode: readable
-
-Generated: song.py
-```
-
-## Conversion Modes
-
-### Exact Mode (default)
-
-Preserves MIDI data as accurately as possible:
-
-```bash
-python midi_to_python.py song.mid -o song.py --mode exact
-```
-
-Preserved:
-
-- ticks per beat
-- tracks, channels, timing
-- note timing, durations, velocity
-- tempo, time signature, key signature
-- instruments, program changes
-- control changes, pitch bend, aftertouch
-- relevant metadata
-
-Generated file example:
-
-```python
-"""
-Generated by MIDI-to-Python.
-
-Source MIDI: song.mid
-Conversion mode: exact
-"""
-
-from mido import MidiFile, MidiTrack, Message, MetaMessage
-
-TICKS_PER_BEAT = 480
-MIDI_TYPE = 1
-OUTPUT_MIDI = "song_recreated.mid"
-
-mid = MidiFile(ticks_per_beat=TICKS_PER_BEAT, type=MIDI_TYPE)
-
-track_0 = MidiTrack()
-track_0.append(MetaMessage('track_name', name='Piano', time=0))
-track_0.append(Message('program_change', channel=0, program=0, time=0))
-track_0.append(Message('note_on', channel=0, note=60, velocity=64, time=0))
-track_0.append(Message('note_off', channel=0, note=60, velocity=64, time=480))
-mid.tracks.append(track_0)
-
-mid.save(OUTPUT_MIDI)
-```
-
-### Readable Mode
-
-Generates human-readable musical structures:
-
-```bash
-python midi_to_python.py song.mid -o song.py --mode readable
-```
-
-Example output:
-
-```python
-CHORDS = {
-    "E5": [52, 59, 64],
-    "G5": [55, 62, 67],
-}
-
-melody = [
-    ("E5", 0.5),
-    ("G5", 0.5),
-    ("A5", 1.0),
-]
-```
-
-Readable mode includes:
-
-- Helper functions: `note_name()`, `add_note()`, `add_chord()`
-- Track names, instruments, channels
-- Note names, numbers, durations in beats
-- Tempo, time signature, key signature
-- Chord detection (notes starting at same tick)
-- Bars/measures estimation
-- Comments explaining musical structure
-
-```python
-# Helper functions for readable musical representation
-def note_name(midi_note: int) -> str:
-    ...
-
-TICKS_PER_BEAT = 480
-TEMPO_BPM = 120.0
-TIME_SIGNATURE = (4, 4)
-KEY_SIGNATURE = "C"
-
-# Track 0: Piano
-# Notes: 24
-notes_0 = [
-    ("C4", 60, 0.000, 1.000, 64, 0),  # tick 0
-    ("E4", 64, 1.000, 1.000, 64, 0),  # tick 480
-]
-```
-
-> Note: Readable mode still preserves correctness. It does not sacrifice accurate timing for musical appearance.
-
-## Project Architecture
-
-```
-midi-to-python/
-│
-├── midi_to_python.py        # CLI entry point wrapper
-├── requirements.txt
-├── pyproject.toml
-├── README.md
-├── LICENSE
-├── .gitignore
-│
-├── midi2python/
-│   ├── __init__.py
-│   ├── converter.py         # High-level conversion orchestration
-│   ├── parser.py            # MIDI parsing into structured data
-│   ├── generator.py         # Code generation (exact & readable)
-│   ├── models.py            # Data models (MidiFileData, TrackData, etc.)
-│   ├── cli.py               # Argparse CLI
-│   └── utils.py             # Helpers (note names, sanitization, etc.)
-│
-├── examples/
-│   ├── README.md
-│   └── generated_example.py # Example generated file
-│
-└── tests/
-    ├── __init__.py
-    ├── test_parser.py
-    ├── test_generator.py
-    ├── test_roundtrip.py
-    └── test_cli.py
-```
-
-### Module responsibilities
-
-- **parser.py**: Parses MIDI via Mido, converts delta times to absolute ticks, extracts notes, tempo, time/key signatures
-- **models.py**: Dataclasses for `MidiFileData`, `TrackData`, `NoteEvent`, `ParsedMessage`
-- **generator.py**: Generates Python code from parsed data, two modes
-- **converter.py**: Orchestrates parse → generate → write, validates syntax
-- **cli.py**: User-facing CLI with friendly errors and info display
-- **utils.py**: Note name conversion, filename sanitization, musical helpers
-
-## Supported MIDI Messages
-
-| Category | Messages |
-|----------|----------|
-| **Notes** | `note_on`, `note_off` (including velocity 0 as note off) |
-| **Program** | `program_change` |
-| **Control** | `control_change` |
-| **Pitch** | `pitchwheel`, `aftertouch`, `polytouch` |
-| **Tempo** | `set_tempo` |
-| **Time** | `time_signature` |
-| **Key** | `key_signature` |
-| **Meta** | `track_name`, `instrument_name`, `lyrics`, `marker`, `cue_point`, `text`, etc. |
-| **Other** | `sysex` (where supported by Mido) |
-
-## Limitations & Round-Trip Behavior
-
-The converter aims for high fidelity, but some limitations exist:
-
-- **Sysex**: Preserved as data list if present, but device-specific sysex may not round-trip perfectly on all systems
-- **Unknown meta messages**: Preserved if Mido can parse them; truly unknown binary blobs may be skipped
-- **Timing**: Delta times are preserved exactly; absolute timing is reconstructed from deltas
-- **Empty tracks**: Preserved (with `end_of_track`)
-- **Overlapping notes**: Correctly handled via note tracking
-- **Velocity 0 note_on**: Treated as note_off per MIDI spec
-
-Round-trip tests verify:
-
-- track count
-- ticks per beat
-- message types
-- note numbers, velocity, channels, timing
-- tempo, program changes, control changes
-
-Documented non-perfect cases:
-
-- Files with malformed messages that Mido auto-corrects may have corrected values in output
-- Some sequencer-specific meta messages might lose non-standard fields if Mido doesn't expose them
-
-## Development Setup
-
-```bash
-git clone https://github.com/prathvirajkodachadri/PKmusicgen.git
-cd PKmusicgen
-python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-pip install pytest
-pytest
-```
-
-## Testing
-
-Tests use synthetic MIDI files (no copyrighted material):
-
-```bash
-pytest
-pytest -v
-pytest tests/test_roundtrip.py -v
-```
-
-Test categories:
-
-1. Empty MIDI
-2. Single-note MIDI
-3. Multiple notes
-4. Multiple tracks
-5. Multiple channels
-6. Drums (channel 10)
-7. Tempo changes
-8. Program changes
-9. Control changes
-10. Round-trip conversion
-11. CLI behavior
-12. Invalid MIDI input
-13. Invalid output path
-14. Readable mode
-15. Exact mode
-
-Example round-trip manual test:
-
-```bash
-python -c "
-import mido
-mid = mido.MidiFile(ticks_per_beat=480)
-track = mido.MidiTrack()
-track.append(mido.Message('note_on', note=60, velocity=64, time=0))
-track.append(mido.Message('note_off', note=60, velocity=64, time=480))
-mid.tracks.append(track)
-mid.save('test.mid')
-"
-
-python midi_to_python.py test.mid -o test.py --mode exact
-python test.py
-# Should create test_recreated.mid identical to test.mid
-```
-
-## Security
-
-- MIDI files are treated as untrusted input
-- No `eval()` or `exec()` on MIDI contents
-- Filenames sanitized to prevent path traversal
-- Generated identifiers sanitized
-- Only parses MIDI data and generates Python source
-
-## Code Quality
-
-- PEP 8
-- Type hints
-- Docstrings
-- Clean naming
-- Modular functions
-- Small testable components
-
-## Future Extensibility
-
-Architecture designed for easy addition of:
-
-- MIDI → Python (current)
-- Python → MIDI (current via generated file, future direct API)
-- MIDI analysis
-- Chord detection (basic version included in readable mode)
-- Scale detection
-- Melody extraction
-- Drum pattern extraction
-- AI-assisted arrangement
-- MusicXML export
-- JSON representation
-- Web API
-
-To extend, add new modules in `midi2python/` and register in `converter.py`.
-
-## Example Workflow
-
-```bash
-pip install -r requirements.txt
-
-python midi_to_python.py my_song.mid -o my_song.py
-
-python my_song.py
-# Generates my_song_recreated.mid
-```
-
-## Contributing
-
-1. Fork the repo
-2. Create a feature branch
-3. Make changes with tests
-4. Run `pytest`
-5. Submit a pull request
-
-Please:
-
-- Follow PEP 8
-- Add type hints
-- Write tests for new features
-- Update README if needed
-
-## License
-
-MIT License - see [LICENSE](LICENSE) for details.
-
-## Acknowledgments
-
-- [Mido](https://mido.readthedocs.io/) - MIDI library for Python
-- Inspired by tools for musicians, producers, and AI music research
